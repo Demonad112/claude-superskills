@@ -181,7 +181,7 @@ import sys
 video_id = sys.argv[1]
 
 try:
-    transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+    transcript_list = YouTubeTranscriptApi().list(video_id)
     print(f"✅ Video accessible: {video_id}")
     for transcript in transcript_list:
         lang_type = "[Auto-generated]" if transcript.is_generated else "[Manual]"
@@ -222,17 +222,26 @@ echo "[████████████░░░░░░░░] 60% - Step 
 
 **Mode A (Python):**
 
+Use the bundled script (requires `youtube-transcript-api` >= 1.0; the pre-1.0 `get_transcript()` API no longer exists):
+
+```bash
+# Single video → stdout
+python3 scripts/extract-transcript.py "https://youtu.be/VIDEO_ID" --lang en
+
+# Multiple videos → one file per video (duplicates fetched once, title/channel header added)
+python3 scripts/extract-transcript.py URL1 URL2 URL3 --timestamps --out-dir /tmp/transcripts
+```
+
+Equivalent inline code:
+
 ```python
 from youtube_transcript_api import YouTubeTranscriptApi
 
 video_id = "VIDEO_ID"
 
 try:
-    transcript = YouTubeTranscriptApi.get_transcript(
-        video_id,
-        languages=['pt', 'en']  # Prefer Portuguese, fallback to English
-    )
-    full_text = " ".join([entry['text'] for entry in transcript])
+    fetched = YouTubeTranscriptApi().fetch(video_id, languages=['en'])
+    full_text = " ".join(segment.text for segment in fetched)
     print("✅ Transcript extracted successfully")
     print(f"📊 Transcript length: {len(full_text)} characters")
     with open(f"/tmp/transcript_{video_id}.txt", "w") as f:
@@ -241,6 +250,10 @@ except Exception as e:
     print(f"❌ Error extracting transcript: {e}")
     exit(1)
 ```
+
+**Multiple URLs:** when the user supplies several URLs, extract all of them in one batch call with `--out-dir` and `--timestamps`, report which succeeded or failed, then summarize each video. When the user asks a question across the videos, answer it from all transcripts together: cite video ID + timestamp for each claim and list where creators disagree.
+
+**IP blocked:** cloud and CI hosts often get `IpBlocked`/`RequestBlocked` (or HTTP 429 "Sign in to confirm you're not a bot") even when youtube.com itself loads. Allowing more hosts does not fix this. Run from a residential network, or fall through to Mode B, then Mode C.
 
 **Mode B (WebFetch):**
 
