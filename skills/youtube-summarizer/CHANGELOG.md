@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.0] - 2026-09-24
+
+### 🐛 Fixed
+
+- **`extract-transcript.py` broken on youtube-transcript-api 1.x** — `get_transcript()` / `list_transcripts()` were removed upstream, so every fresh install failed. Migrated to `YouTubeTranscriptApi().fetch()` / `.list()` and pinned `youtube-transcript-api>=1.0`.
+- SKILL.md Mode A snippets updated to the same API.
+
+### ✨ Added
+
+- **Multi-URL batch mode** — pass several URLs/IDs in one call; duplicates are fetched once.
+- Accepts full URLs (`youtu.be/`, `watch?v=`, `/shorts/`, `/live/`, `/embed/`, `?si=` tracking params) as well as bare IDs.
+- `--out-dir` (one file per video with title/channel header via oEmbed), `--timestamps` (`[mm:ss]` prefixes for citations).
+- Explicit IP-block error message (cloud/CI hosts) pointing to Mode B/C.
+
+---
+
 ## [1.2.1] - 2026-02-04
 
 ### 🐛 Fixed
