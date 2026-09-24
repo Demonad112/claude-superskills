@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.3.0] - 2026-09-24
+
+### ✨ Added
+
+- **Supadata provider for cloud/CI hosts** — `extract-transcript.py --provider supadata|auto|youtube`. With `SUPADATA_API_KEY` set, the default is `auto`: fetch from YouTube directly and fall back to `api.supadata.ai` when YouTube IP-blocks the host. Handles async jobs (HTTP 202 → polls `/transcript/{jobId}`).
+- `--mode native|auto|generate` (Supadata): `native` (default) uses existing captions only; the others allow AI transcription at higher credit cost.
+- Transcript file headers record `# Source:` (youtube or supadata).
+
+---
+
 ## [2.2.0] - 2026-09-24
 
 ### 🐛 Fixed
