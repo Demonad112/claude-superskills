@@ -192,7 +192,7 @@ def list_available_transcripts(api, video_id):
 
 def main():
     parser = argparse.ArgumentParser(description="Extract YouTube transcripts")
-    parser.add_argument("videos", nargs="+", help="YouTube URLs or video IDs")
+    parser.add_argument("videos", nargs="*", help="YouTube URLs or video IDs")
     parser.add_argument("--lang", default="en", help="preferred language code (falls back to en)")
     parser.add_argument("--out-dir", help="write one <video_id>.txt per video instead of stdout")
     parser.add_argument("--timestamps", action="store_true", help="prefix each line with [mm:ss]")
@@ -202,7 +202,13 @@ def main():
     parser.add_argument("--mode", choices=["native", "auto", "generate"], default="native",
                         help="Supadata mode: native = existing captions only (cheapest); "
                              "auto/generate allow AI transcription (costs more credits)")
-    args = parser.parse_args()
+    # Video IDs can start with "-" (e.g. -R5KjDJQu9w), which argparse would
+    # treat as options, so pull them out before parsing.
+    dash_ids = [a for a in sys.argv[1:] if a.startswith("-") and ID_PATTERN.match(a)]
+    args = parser.parse_args([a for a in sys.argv[1:] if a not in dash_ids])
+    args.videos += dash_ids
+    if not args.videos:
+        parser.error("at least one YouTube URL or video ID is required")
 
     api_key = os.environ.get("SUPADATA_API_KEY")
     provider = args.provider or ("auto" if api_key else "youtube")

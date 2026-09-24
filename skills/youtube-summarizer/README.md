@@ -370,7 +370,7 @@ MIT License - see [LICENSE](../../../LICENSE) for details.
 
 | Field | Value |
 |-------|-------|
-| Version | 2.3.0 |
+| Version | 2.3.1 |
 | Author | Eric Andrade |
 | Created | 2025-02-01 |
 | Updated | 2026-09-24 |
