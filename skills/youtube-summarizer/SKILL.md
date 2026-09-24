@@ -253,7 +253,7 @@ except Exception as e:
 
 **Multiple URLs:** when the user supplies several URLs, extract all of them in one batch call with `--out-dir` and `--timestamps`, report which succeeded or failed, then summarize each video. When the user asks a question across the videos, answer it from all transcripts together: cite video ID + timestamp for each claim and list where creators disagree.
 
-**IP blocked:** cloud and CI hosts often get `IpBlocked`/`RequestBlocked` (or HTTP 429 "Sign in to confirm you're not a bot") even when youtube.com itself loads. Allowing more hosts does not fix this. Run from a residential network, or fall through to Mode B, then Mode C.
+**IP blocked:** cloud and CI hosts (including Claude Code on the web) often get `IpBlocked`/`RequestBlocked` (or HTTP 429 "Sign in to confirm you're not a bot") even when youtube.com itself loads. Allowing more hosts does not fix this. If `SUPADATA_API_KEY` is set, the script falls back to the Supadata transcript API automatically (`--provider auto`; force it with `--provider supadata`; `--mode native` uses existing captions only, which is the cheapest). The host `api.supadata.ai` must be allowed by the network policy. Without a key, run from a residential network, or fall through to Mode B, then Mode C. Never ask the user to paste an API key into chat; it belongs in the environment.
 
 **Mode B (WebFetch):**
 
