@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.3.1] - 2026-09-24
+
+### 🐛 Fixed
+
+- **Video IDs starting with `-`** (e.g. `-R5KjDJQu9w`) no longer need a `--` separator. argparse treated them as unknown options, and placing `--` before other flags silently turned those flags into bogus video IDs. Dash-prefixed IDs are now pulled out before parsing.
+
+---
+
 ## [2.3.0] - 2026-09-24
 
 ### ✨ Added
